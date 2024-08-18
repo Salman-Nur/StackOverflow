@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-j48Lr6aAQiT6hNm6Q5Hf5HQWJT6/pkX7f7rKwF6axx5vZY2i5MJXH0+db3y2BV3g4xQI01bGrx6XOZCCS4eL1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .box {
+            padding: 30px; /* Increased padding */
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .box h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .box p {
+            font-size: 18px;
+        }
+
+        .box .icon {
+            font-size: 40px;
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .box.primary {
+            background-color: pink;
+            color: black;
+        }
+
+        .box.secondary {
+            background-color: plum;
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mb-4">
+                <div class="box primary">
+                    <i class="fas fa-search icon"></i>
+                    <h3>Find the best answer to your technical question</h3>
+                    <p>Help others answer theirs</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box secondary">
+                    <i class="fas fa-users icon"></i>
+                    <h3>A public platform building the definitive collection of coding questions & answers</h3>
+                    <p>A community-based space to find and contribute answers to technical challenges, and one of the most popular websites in the world.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

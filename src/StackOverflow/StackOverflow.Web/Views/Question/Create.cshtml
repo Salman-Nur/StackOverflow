@@ -1,0 +1,51 @@
+﻿@model QuestionCreateModel
+@{
+	ViewData["Title"] = "Create";
+}
+@section Styles {
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+}
+
+<div class="col-md-8">
+	<div class="card card-primary">
+		<div class="card-header">
+			<h3 class="card-title">Ask a public question</h3>
+		</div>
+		<form asp-action="Create" asp-controller="Question" asp-area=""
+			  asp-antiforgery="true">
+			<div class="card-body">
+				<div class="row form-group">
+					<div class="col-6">
+						<label asp-for="Title" class="control-label"></label>
+						<input asp-for="Title" class="form-control" />
+						<span asp-validation-for="Title" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label asp-for="Body" class="control-label"></label>
+					<textarea id="markdownEditor" asp-for="Body" class="form-control"></textarea>
+					<span asp-validation-for="Body" class="text-danger"></span>
+				</div>
+				<div class="col-6">
+					<label asp-for="Tag" class="control-label"></label>
+					<input asp-for="Tag" class="form-control" />
+					<span asp-validation-for="Tag" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="card-footer">
+				<button type="submit" class="btn btn-primary">Post Question</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts
+{
+	<script src="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked@3.0.2/marked.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
+	<script>
+		var simplemde = new SimpleMDE({ element: document.getElementById("markdownEditor") });
+	</script>
+	<partial name="_ValidationScriptsPartial" />
+}

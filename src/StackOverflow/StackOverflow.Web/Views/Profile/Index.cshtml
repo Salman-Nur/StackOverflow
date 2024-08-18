@@ -1,0 +1,80 @@
+﻿@model ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+@section Styles {
+    <style>
+        .profile-container {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-details {
+            margin-top: 20px;
+        }
+
+        .profile-title {
+            font-weight: bold;
+        }
+
+        .edit-button {
+            margin-top: 10px;
+        }
+
+        .image-thumbnail {
+            max-width: 150px;
+            max-height: 150px;
+        }
+    </style>
+}
+
+
+<div class="col-md-6">
+    <p class="profile-title">Your Profile</p>
+    <div class="profile-container">
+        @if (Model.ImageUrl is not null)
+        {
+            <div>
+                <img src="@Model.ImageUrl" class="image-thumbnail" />
+            </div>
+            <div class="image-thumbnail no-image-placeholder">
+                <a href="@Url.Action("Edit", "Profile")" class="btn btn-sm btn-outline-primary">Upload new image</a>
+            </div>
+        }
+        else
+        {
+            <div class="image-thumbnail no-image-placeholder">
+                <a href="@Url.Action("Edit", "Profile")" class="btn btn-sm btn-outline-primary">Upload Profile Picture</a>
+            </div>
+        }
+
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link text-blue fw-bold p-0 mt-4" asp-area="" asp-controller="Profile" asp-action="MyQuestions">My Questions</a>
+            </li>
+            <li class="nav-item">
+                <p><strong style="color: blue;">Points:</strong> <span style="color: red; font-weight: bold;">@((Model.Questions * 10) + (Model.Answers * 10))</span> </p>
+            </li>
+            <li class="nav-item">
+                <p><strong>UserName:</strong> @Model.UserName</p>
+            </li>
+            <li class="nav-item">
+                <p><strong>Title:</strong> @Model.Title</p>
+            </li>
+            <li class="nav-item">
+                <p><strong>Description:</strong> @Model.Description</p>
+            </li>
+            <li class="nav-item">
+                <p><strong>Country:</strong> @Model.Country</p>
+            </li>
+        </ul>
+
+        <a href="@Url.Action("Edit", "Profile")" class="btn btn-primary edit-button">Edit Profile</a>
+    </div>
+</div>
+
+
+

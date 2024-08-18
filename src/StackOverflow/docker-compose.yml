@@ -1,0 +1,31 @@
+version: "3"
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: StackOverflow.Web/Dockerfile
+    image: my-web-image
+    env_file: 
+      - StackOverflow.Web/web.env
+      - StackOverflow.Web/credentials.env
+    container_name: my-web-container
+    volumes:
+      - ./Logs/Web:/app/Logs/
+    ports:
+      - "8000:80"
+    entrypoint: ["dotnet", "StackOverflow.Web.dll"]
+
+  worker:
+    build: 
+      context: .
+      dockerfile: StackOverflow.Worker/Dockerfile
+    image: my-worker-image
+    env_file: 
+      - StackOverflow.Worker/credentials.env
+    container_name: my-worker-container 
+    volumes:
+      - ./Logs/Worker:/app/Logs/
+    entrypoint: ["dotnet", "StackOverflow.Worker.dll"]
+
+volumes:
+  app-volume:

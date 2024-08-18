@@ -1,0 +1,216 @@
+﻿@model QuestionDetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+@section Styles {
+    <style>
+        
+        .question-details {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+            .card-header {
+                background-color: lightgray;
+                color: black;
+                border-bottom: 1px solid black;
+            }
+
+                .question-details .card-body p {
+                    padding: 20px;
+                    margin: 0;
+                }
+
+        .view-profile-link {
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            font-size: 12px;
+            padding: 6px 14px; 
+        }
+
+        .small-box {
+            width: 50px; 
+            height: 30px; 
+            background-color: white; 
+            margin: 10px; 
+            border: 2px solid black;
+        }
+    </style>
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+
+
+<div class="form-group d-flex align-items-center">
+    <input type="hidden" id="questionId" value="@Model.Id" />
+    <button type="submit" class="btn btn-success" id="upvoteButton">Upvote</button>
+    <button type="submit" class="btn btn-danger" id="downvoteButton">Downvote</button>
+    <div class="small-box ml-auto d-flex justify-content-center align-items-center">
+        <strong>@Model.TotalVote</strong>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="col-md-8" style="margin-bottom: 80px;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@Model.Title</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Body != null)
+            {
+                <pre>@Model.Body</pre>
+            }
+            else
+            {
+                <p>No content available</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<div class="col-md-8" style="margin-bottom: 5px;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@Model.Comments.Count() Comment</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Comments.Count() > 0)
+            {
+                foreach (var comment in Model.Comments)
+                {
+                    <p><a href="@Url.Action("ViewProfile", "Profile", new { userName = comment.UserName })" class="view-profile-link">@comment.UserName</a> @comment.CommentText </p>
+                }
+            }
+            else
+            {
+                <p>No comment available</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="col-md-8" style="margin-bottom: 80px;">
+    <form asp-action="Create" asp-controller="Comment" asp-antiforgery="true" method="post">
+        <input type="hidden" name="questionId" value="@Model.Id" />
+        <div class="form-group">
+            <input type="text" id="commentInput" asp-for="CommentText" class="form-control" placeholder="Write your comment here">
+            <span asp-validation-for="CommentText" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" id="saveButton">Post Your Comment</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+<div class="col-md-8" style="margin-bottom: 80px;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@Model.Answers.Count() Answer</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Answers.Count() > 0)
+            {
+                foreach (var answer in Model.Answers)
+                {
+                    <p><strong style="font-size: 1.2em;">Answered by</strong> <a href="@Url.Action("ViewProfile", "Profile", new { userName = answer.UserName })" class="view-profile-link">@answer.UserName</a></p>
+                    <pre>@answer.AnswerText</pre>
+                    <hr style="border-bottom: 2px solid black;">
+                }
+            }
+            else
+            {
+                <p>No answer available</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="col-md-8" style="margin-bottom: 100px;">
+    <div class="card">
+        <div class="card-header">
+            <h3>Your Answer</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" asp-controller="Answer" asp-antiforgery="true" method="post">
+                <input type="hidden" name="questionId" value="@Model.Id" />
+                <div class="form-group">
+                    <textarea id="markdownEditor" asp-for="AnswerText" class="form-control"></textarea>
+                    <span asp-validation-for="AnswerText" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="saveButton">Post Your Answer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@3.0.2/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE({ element: document.getElementById("markdownEditor") });
+        $(document).ready(function () {
+            $("#upvoteButton").click(function () {
+                voteQuestion(1); // 1 represents upvote type
+            });
+
+            $("#downvoteButton").click(function () {
+                voteQuestion(-1); // -1 represents downvote type
+            });
+        });
+
+        function voteQuestion(voteType) {
+            var questionId = $("#questionId").val();
+
+            $.ajax({
+                url: "/Vote/Create", // URL for Upvote action (assuming same for Downvote)
+                type: "POST",
+                data: { questionId: questionId, voteType: voteType },
+                success: function (data) {
+                    // Handle successful vote (update UI or display message)
+                    if (data.success) {
+                        $("#responseMessage").text(data.message);
+                        alert(data.message);
+                        window.location.href = "/Question/Details?id=" + questionId;
+                    } 
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status === 401) {
+                        // Redirect to login page if user is not authenticated
+                        window.location.href = "/Auth/Login";
+                        alert("Login required");
+                    } else {
+                        alert("An error occurred while voting. Please try again later.");
+                    }
+                }
+            });
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

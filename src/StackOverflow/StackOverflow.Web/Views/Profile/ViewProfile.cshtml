@@ -1,0 +1,62 @@
+﻿@model ProfileViewModel
+@using System.Text;
+@{
+    ViewData["Title"] = "ViewProfile";
+}
+
+@section Styles {
+    <style>
+        .profile-container {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-details {
+            margin-top: 20px;
+        }
+
+        .profile-title {
+            font-weight: bold;
+        }
+
+        .edit-button {
+            margin-top: 10px;
+        }
+
+        .image-thumbnail {
+            max-width: 150px;
+            max-height: 150px;
+        }
+    </style>
+}
+
+<div class="col-md-6">
+    <div class="profile-container">
+        @if (Model.ImageUrl is not null)
+        {
+            <div>
+                <img src="@Model.ImageUrl" class="image-thumbnail" />
+            </div>
+        }
+        else
+        {
+            <div class="image-thumbnail no-image-placeholder">
+                <p><strong>Profile picture not available</strong></p>
+            </div>
+        }
+        <ul class="nav flex-column" style="margin-top: 20px;">
+            <li class="nav-item">
+                <p><strong style="color: blue;">Points:</strong> <span style="color: red; font-weight: bold;">@((Model.Questions * 10) + (Model.Answers * 10))</span> </p>
+            </li>
+        </ul>
+        <div class="profile-details" style="margin-top: 5px;">
+            <p><strong>UserName:</strong> @Model.UserName</p>
+            <p><strong>Title:</strong> @Model.Title</p>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Country:</strong> @Model.Country</p>
+        </div>
+    </div>
+</div>
+
