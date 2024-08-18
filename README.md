@@ -1,6 +1,6 @@
 # StackOverflow
 
-# StackOverflow Clone Implementation with ASP.NET 6 MVC and Razor Pages
+# StackOverflow Clone Implementation with ASP.NET 8 MVC and Razor Pages
 
 ## Default User Accounts for Testing
 ### User1
